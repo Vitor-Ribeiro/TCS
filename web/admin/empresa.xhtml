@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../comum/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+            <div class="row">
+                <ol class="breadcrumb">
+                    <li><a href="index.xhtml"> <em class="fa fa-home"></em>
+                        </a>
+                    </li>
+                    <li class="active">Empresa</li>
+                </ol>
+            </div>
+
+
+
+            <!--inicio das abas -->
+            <div class="row">
+                <div class="col-lg-12">
+
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body tabs">
+
+                            <div class="tab-content">
+
+                                <!--inicio aba-->
+                                <p:messages id="messages" showDetail="true" closable="true">
+                                    <p:autoUpdate />
+                                </p:messages>
+                                <p:tabView id="tab_view" activeIndex="#{empresaC.numeroAba}">
+                                    <p:tab title="Pesquisar">
+                                        <h:form id="form_">                                            
+                                            <div class="form-group">
+                                                <p:outputLabel for="empresa" value="Empresa:"/>
+                                                <p:inputText id="empresa" styleClass="form-control" value="#{empresaC.empresa.nome}"
+                                                             required="true" requiredMessage="Digite uma parte do nome do produto" />
+                                            </div>
+                                            <h:commandButton styleClass="btn btn-primary" value="Pesquisar" action="#{empresaC.pesquisarPorNome()}" />
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p:dataTable var="company" value="#{empresaC.empresas}" paginator="true" reflow="true">
+                                                        <p:column headerText="Nome: ">
+                                                            <h:outputText value="#{company.nome}" />
+                                                        </p:column>                                                       
+
+                                                        <p:column headerText="Ação"  style="text-align: center; width: 11%">
+
+                                                            <p:commandLink   actionListener="#{empresaC.excluir()}" update="@form">
+                                                                <p:confirm header="Confirmação" message="Deseja realmente exluir?" icon="fa fa-exclamation-triangle" />
+                                                                <i class="fa fa-trash" style="font-size: 3rem">
+
+                                                                </i>
+
+                                                            </p:commandLink>
+                                                            <h:commandLink actionListener="#{empresaC.alterar()}" style="margin-left: 30px">
+                                                                <i class="fa fa-pencil-square" style="font-size: 3rem">
+
+                                                                </i>
+                                                            </h:commandLink>
+
+                                                        </p:column>
+
+                                                    </p:dataTable>
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
+                                                        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes"
+                                                                         icon="ui-icon-check" />
+                                                        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no"
+                                                                         icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </div>
+
+                                            </div>
+                                        </h:form>
+
+
+                                    </p:tab>
+                                    <p:tab title="Novo">
+                                        <h:form id="salvar">
+                                            <p:panelGrid columns="4" style="margin-bottom: 15px">
+                                                <p:outputLabel for="matutinoInicial" value="Matutino Inicial: " style="margin: 10px"/>
+                                                <p:calendar id="matutinoInicial" value="#{empresaC.periodo.matutinoInicial}" pattern="HH:mm" timeOnly="true"  size="8" style="margin: 10px"/>                                                
+                                                <p:outputLabel for="matutinoFinal" value="Matutino Final: " style="margin: 10px"/>
+                                                <p:calendar id="matutinoFinal" value="#{empresaC.periodo.matutinoFinal}" pattern="HH:mm" timeOnly="true"  size="8" style="margin: 10px"/>
+                                                
+                                                <p:outputLabel for="vespertinoInicial" value="Vespertino Final: " style="margin: 10px"/>
+                                                <p:calendar id="vespertinoInicial" value="#{empresaC.periodo.vespertinoInicial}" pattern="HH:mm" timeOnly="true"  size="8" style="margin: 10px"/>                                                
+                                                <p:outputLabel for="vespertinoFinal" value="Vespertino Final: " style="margin: 10px"/>
+                                                <p:calendar id="vespertinoFinal" value="#{empresaC.periodo.vespertinoFinal}" pattern="HH:mm" timeOnly="true"  size="8" style="margin: 10px"/>
+                                                
+                                                <p:outputLabel for="noturnoInicial" value="Noturno Inicial: " style="margin: 10px"/>
+                                                <p:calendar id="noturnoInicial" value="#{empresaC.periodo.noturnoInicial}" pattern="HH:mm" timeOnly="true"  size="8" style="margin: 10px"/>                                                
+                                                <p:outputLabel for="noturnoFinal" value="Noturno Final: " style="margin: 10px"/>
+                                                <p:calendar id="noturnoFinal" value="#{empresaC.periodo.noturnoFinal}" pattern="HH:mm" timeOnly="true"  size="8" style="margin: 10px"/>
+                                            </p:panelGrid>
+
+
+                                            <div class="form-group">
+                                                <p:outputLabel for="empresa" value="nome: " />                           
+                                                <p:inputText id="empresa" styleClass="form-control" value="#{empresaC.empresa.nome}" required="true" requiredMessage="nome é obrigatório!" />
+
+                                                <p:outputLabel for="numero" value="Numero: " />                           
+                                                <p:inputText id="numero" styleClass="form-control" value="#{empresaC.endereco.numero}" required="true" requiredMessage="numero é obrigatório!" />
+
+                                                <p:outputLabel for="logradouro" value="Logradouro: " />                           
+                                                <p:inputText id="logradouro" styleClass="form-control" value="#{empresaC.endereco.logradouro}" required="true" requiredMessage="logradouro é obrigatório!" />
+
+                                                <p:outputLabel for="complemento" value="Complemento: " />                           
+                                                <p:inputText id="complemento" styleClass="form-control" value="#{empresaC.endereco.complemento}" required="true" requiredMessage="complemento é obrigatório!" />
+
+                                                <p:outputLabel for="cep" value="Cep: " />                           
+                                                <p:inputMask id="cep" styleClass="form-control" value="#{empresaC.endereco.cep}" 
+                                                             required="true" requiredMessage="cep é obrigatório!" mask="*****-***">
+                                                    <p:ajax event="blur" listener="#{empresaC.buscarCep}" update="bairro, cidade, estado, logradouro"/>
+                                                </p:inputMask>
+
+                                                <p:outputLabel for="bairro" value="Bairro: " />                           
+                                                <p:inputText id="bairro" styleClass="form-control" value="#{empresaC.endereco.bairro}" required="true" requiredMessage="bairro é obrigatório!" />
+
+                                                <p:outputLabel for="cidade" value="Cidade: " />                           
+                                                <p:inputText id="cidade" styleClass="form-control" value="#{empresaC.endereco.localidade}" required="true" requiredMessage="cidade é obrigatório!" />
+
+                                                <p:outputLabel for="estado" value="Estado: " />                           
+                                                <p:inputText id="estado" styleClass="form-control" value="#{empresaC.endereco.uf}" required="true" requiredMessage="estado é obrigatório!" />
+
+                                                <p:outputLabel for="pais" value="País: " />                           
+                                                <p:inputText id="pais" styleClass="form-control" value="#{empresaC.endereco.pais}" required="true" requiredMessage="pais é obrigatório!" />
+
+
+                                            </div>
+                                            <h:panelGroup>
+                                                <p:commandButton value="Salvar" styleClass="btn btn-primary" actionListener="#{empresaC.salvar()}" update="tab_view messages @form" />
+                                                <p:commandButton styleClass="btn btn-primary" value="Limpar" />
+
+                                            </h:panelGroup>
+
+
+
+
+                                            <!--    </h:panelGrid>  -->
+
+                                        </h:form>
+
+                                    </p:tab>
+
+                                </p:tabView>
+
+                                <!--fim aba-->
+
+
+
+
+                            </div>
+                        </div>
+                    </div><!--/.panel-->
+                </div><!--/.col-->
+
+
+            </div><!-- /.row -->
+
+
+
+
+        </div>
+    </ui:define>
+
+</ui:composition>
+

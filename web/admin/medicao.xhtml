@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../comum/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+            
+
+
+
+            <!--inicio das abas -->
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        
+
+                            <div class="tab-content">
+
+                                <!--inicio aba-->
+                                <p:messages id="messages" showDetail="true" closable="true">
+                                    <p:autoUpdate />
+                                </p:messages>
+                                <p:tabView id="tab_view" activeIndex="#{medicaoC.numeroAba}">
+                                    <p:ajax event="tabChange" listener="#{medicaoC.onTabChange}" update="tab_view:salvar:produto"/>
+                                    <p:tab title="Pesquisar">
+                                        <h:form id="form_">                                            
+                                            <div class="form-group">
+                                                <p:outputLabel for="medicao" value="Medicao: "/>
+                                                <p:inputText id="medicao" styleClass="form-control" value="#{medicaoC.medicao.unidade}"
+                                                             required="true" requiredMessage="Digite uma parte do nome da medição" />
+                                            </div>
+                                            <h:commandButton styleClass="btn btn-primary" value="Pesquisar" action="#{medicaoC.pesquisarPorMedicao()}" />
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p:dataTable var="measurement" value="#{medicaoC.medicoes}" paginator="true" reflow="true">
+                                                        <p:column headerText="Unidade: ">
+                                                            <h:outputText value="#{measurement.unidade}" />
+                                                        </p:column> 
+
+                                                        <p:column headerText="Valor: ">
+                                                            <h:outputText value="#{measurement.valor}" />
+                                                        </p:column> 
+
+                                                        <p:column headerText="Data Medição: ">
+                                                            <h:outputText value="#{measurement.dt_medicao}" > 
+                                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                            </h:outputText>
+                                                        </p:column> 
+
+                                                        <p:column headerText="Ação"  >
+
+                                                            <p:commandLink   actionListener="#{medicaoC.excluir()}" update="@form">
+                                                                <p:confirm header="Confirmação" message="Deseja realmente exluir?" icon="fa fa-exclamation-triangle" />
+                                                                <i class="fa fa-trash" style="font-size: 3rem">
+
+                                                                </i>
+
+                                                            </p:commandLink>
+                                                            <h:commandLink actionListener="#{medicaoC.alterar()}" style="margin-left: 30px">
+                                                                <i class="fa fa-pencil-square" style="font-size: 3rem">
+
+                                                                </i>
+                                                            </h:commandLink>
+
+                                                        </p:column>
+
+                                                    </p:dataTable>
+
+                                                </div>
+
+                                            </div>
+                                        </h:form>
+
+
+                                    </p:tab>
+                                    <p:tab title="Novo">
+                                        <h:form id="salvar">
+                                            <div class="form-group">
+                                                <!--    <h:panelGrid id="panel_salvar" columns="2" cellpadding="10"> -->
+                                                <div class="col-md-12" >
+                                                    <p:outputLabel for="unidade" value="Unidade: " />                           
+                                                    <p:inputText id="unidade" styleClass="form-control" value="#{medicaoC.medicao.unidade}" required="true" requiredMessage="unidade é obrigatória!" />
+                                                </div>
+                                                <div class="col-md-11" style="padding: 10px " >
+                                                    <p:outputLabel for="produto" value="Produto: " /> 
+                                                    <p:selectOneMenu id="produto" styleClass="form-inline" value="#{medicaoC.produto.id}">
+                                                        <f:selectItem itemLabel="Escolha um produto" itemValue="" />
+                                                        <f:selectItems  value="#{medicaoC.itensProdutos}" />
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="col-md-10" >
+                                                    <p:outputLabel for="valor" value="Valor: " />                           
+                                                    <p:inputText id="valor" styleClass="form-control" value="#{medicaoC.medicao.valor}" required="true" requiredMessage="valor é obrigatório!" />
+                                                </div>
+                                                <div  class="col-md-11" style="padding-bottom: 10px">
+                                                    <p:outputLabel for="dt_medicao" value="Data medição: " style="padding-top: 10px"/>                           
+                                                    <p:calendar id="dt_medicao" styleClass="form-inline" style="padding-bottom: 10px" value="#{medicaoC.medicao.dt_medicao}" required="true" requiredMessage="Data da medição é obrigatória!" />                                                                                  
+                                                </div>
+                                                <div class="col-md-10" >
+                                                    <h:panelGroup>
+                                                        <p:commandButton value="Salvar" styleClass="btn btn-primary" actionListener="#{medicaoC.salvar()}" update="tab_view messages @form" />
+                                                        <p:commandButton styleClass="btn btn-primary" value="Limpar" />
+
+                                                    </h:panelGroup>
+                                                </div>
+                                            </div>
+
+
+
+                                            <!--    </h:panelGrid>  -->
+
+                                        </h:form>
+
+                                    </p:tab>
+
+                                </p:tabView>
+
+                                <!--fim aba-->
+
+
+
+
+                            </div>
+                       <!-- </div> -->
+                    </div><!--/.panel-->
+                </div><!--/.col-->
+
+
+            </div><!-- /.row -->
+
+
+
+
+        </div>
+    </ui:define>
+
+</ui:composition>
+

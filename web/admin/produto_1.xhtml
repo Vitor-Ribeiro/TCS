@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../comum/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+            <div class="row">
+                <ol class="breadcrumb">
+                    <li><a href="index.xhtml"> <em class="fa fa-home"></em>
+                        </a>
+                    </li>
+                    <li class="active">Produto</li>
+                </ol>
+            </div>
+
+
+
+            <!--inicio das abas -->
+            <div class="row">
+                <div class="col-lg-12">
+
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body tabs">
+
+                            <div class="tab-content">
+
+                                <!--inicio aba-->
+                                <p:messages id="messages" showDetail="true" closable="true">
+                                    <p:autoUpdate />
+                                </p:messages>
+                                <p:tabView id="tab_view" activeIndex="#{produtoC.numeroAba}">
+                                    <!-- <p:ajax event="tabChange" listener="# {produtoC.onTabChange}" update="form:tab_view:fornecedor categoria"/> -->
+                                    <p:tab title="Pesquisar">
+                                        <h:form id="form_">                                            
+                                            <div class="form-group">
+                                                <p:outputLabel for="produto" value="Produto:"/>
+                                                <p:inputText id="produto" styleClass="form-control" value="#{produtoC.produto.nome}"
+                                                             required="true" requiredMessage="Digite uma parte do nome do produto" />
+                                            </div>
+                                            <h:commandButton styleClass="btn btn-primary" value="Pesquisar" action="#{produtoC.pesquisarPorNome()}" />
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p:dataTable var="product" value="#{produtoC.modelProdutos}" paginator="true" reflow="true">
+                                                        <p:column headerText="Nome: ">
+                                                            <h:outputText value="#{product.nome}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Serial: ">
+                                                            <h:outputText value="#{product.serial}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Local: ">
+                                                            <h:outputText value="#{product.local}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Versao: ">
+                                                            <h:outputText value="#{product.versao}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Fw_Versao: ">
+                                                            <h:outputText value="#{product.fw_versao}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Ação"  style="text-align: center; width: 11%">
+
+                                                            <p:commandLink   actionListener="#{produtoC.excluir()}" update="@form" >
+                                                                <p:confirm header="Confirmação" message="Deseja realmente exluir?" icon="fa fa-exclamation-triangle" /> 
+                                                                <i class="fa fa-trash" style="font-size: 3rem">
+
+                                                                </i>
+
+                                                            </p:commandLink>
+                                                            <h:commandLink actionListener="#{produtoC.alterar()}" style="margin-left: 30px">
+                                                                <i class="fa fa-pencil-square" style="font-size: 3rem">
+
+                                                                </i>
+                                                            </h:commandLink>
+
+
+
+                                                        </p:column>
+
+
+
+
+
+                                                    </p:dataTable>
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
+                                                        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes"
+                                                                         icon="ui-icon-check" />
+                                                        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no"
+                                                                         icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                    
+
+                                                </div>
+
+
+                                            </div>
+                                        </h:form>
+
+
+                                    </p:tab>
+                                    <p:tab title="Novo">
+                                        <h:form id="salvar">
+                                            <div class="form-group">
+                                                <!--    <h:panelGrid id="panel_salvar" columns="2" cellpadding="10"> -->
+                                                <p:outputLabel for="produto" value="nome: " />                           
+                                                <p:inputText id="produto" styleClass="form-control" value="#{produtoC.produto.nome}" required="true" requiredMessage="nome é obrigatório!" autocomplete="off"/>
+
+                                                <div class="col-md-11" >
+                                                    <p:outputLabel for="empresa" value="Empresa: " /> 
+                                                    <p:selectOneMenu id="empresa" styleClass="form-inline" value="#{produtoC.empresa.id}">
+                                                        <f:selectItem itemLabel="Escolha uma Empresa" itemValue="" />
+                                                        <f:selectItems value="#{produtoC.itensEmpresas}" />
+                                                    </p:selectOneMenu>
+                                                </div>                                                                                               
+
+                                                <p:outputLabel for="serial" value="Serial: " />                           
+                                                <p:inputText id="serial" styleClass="form-control" value="#{produtoC.produto.serial}" required="true" requiredMessage="Código é obrigatório!" />                            
+
+                                                <p:outputLabel for="local" value="Local: " />                           
+                                                <p:inputText id="local" styleClass="form-control" value="#{produtoC.produto.local}" required="true" requiredMessage="Local é obrigatório!" /> 
+
+                                                <p:outputLabel for="versao" value="Versão: " />                           
+                                                <p:inputText id="versao" styleClass="form-control" value="#{produtoC.produto.versao}" required="true" requiredMessage="Estoque é obrigatório!" />
+
+                                                <p:outputLabel for="fw_versao" value="Fw_Versão " />                           
+                                                <p:inputTextarea id="fw_versao" styleClass="form-control" value="#{produtoC.produto.fw_versao}" required="true" requiredMessage="Estoque é obrigatório!"/>
+                                            </div>
+                                            <h:panelGroup>
+                                                <p:commandButton value="Salvar" styleClass="btn btn-primary" actionListener="#{produtoC.salvar()}" update="tab_view messages @form" />
+                                                <p:commandButton styleClass="btn btn-primary" value="Limpar" actionListener="#{produtoC.limpar()}" update="@form"/>
+
+                                            </h:panelGroup>
+
+
+
+
+                                            <!--    </h:panelGrid>  -->
+
+                                        </h:form>
+
+                                    </p:tab>
+
+                                </p:tabView>
+
+                                <!--fim aba-->
+
+
+
+
+                            </div>
+                        </div>
+                    </div><!--/.panel-->
+                </div><!--/.col-->
+
+
+            </div><!-- /.row -->
+
+
+
+
+        </div>
+    </ui:define>
+
+</ui:composition>
+
